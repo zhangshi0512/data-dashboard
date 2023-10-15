@@ -1,6 +1,7 @@
 import React from "react";
 
 const Filter = ({ filters, setFilters }) => {
+  // Handle filter change
   const handleFilterChange = (e, filterType) => {
     const value = e.target.value;
     setFilters((prev) => ({ ...prev, [filterType]: value }));
@@ -8,6 +9,7 @@ const Filter = ({ filters, setFilters }) => {
 
   return (
     <div className="filters">
+      {/* Rainfall filter */}
       <select
         value={filters.rainfall}
         onChange={(e) => handleFilterChange(e, "rainfall")}
@@ -17,6 +19,7 @@ const Filter = ({ filters, setFilters }) => {
         <option value="no">Without Rainfall</option>
       </select>
 
+      {/* Wind direction filter */}
       <select
         value={filters.windDirection}
         onChange={(e) => handleFilterChange(e, "windDirection")}
@@ -28,6 +31,7 @@ const Filter = ({ filters, setFilters }) => {
         <option value="west">West</option>
       </select>
 
+      {/* Temperature filter */}
       <select
         value={filters.temperature}
         onChange={(e) => handleFilterChange(e, "temperature")}
