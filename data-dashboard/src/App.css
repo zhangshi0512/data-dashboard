@@ -1,0 +1,137 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.card {
+  flex: 1;
+  margin: 0 10px; /* Add some space between cards */
+  padding: 2em;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: adds a subtle shadow */
+  border-radius: 8px; /* Optional: rounds the corners */
+}
+
+.list {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.list th,
+.list td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.list th {
+  background-color: #f2f2f2;
+  text-align: center;
+}
+
+.list tr:hover {
+  background-color: #f5f5f5;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.container {
+  display: flex;
+  flex-direction: row; /* Changed from column to row */
+  align-items: start; /* Align items to the start of the container */
+  justify-content: space-between; /* Adds space between the main content and the header/nav */
+  width: 100%;
+}
+
+.left-panel {
+  display: flex;
+  flex-direction: column; /* Stack Header and NavBar vertically */
+  align-items: center; /* Center-align items horizontally */
+  justify-content: flex-start; /* Align items to the start of the container vertically */
+  padding: 20px;
+}
+
+.right-panel {
+  flex: 2;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cards-wrapper {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.list-wrapper {
+  flex: 1;
+  /* overflow-y: auto; Add scrollbar if content overflows */
+}
+
+.main-content {
+  flex-grow: 1; /* Allow the main content to take up the remaining space */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px;
+}
+
+.navbar {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+  width: 120px; /* or whatever width you prefer */
+  background-color: white;
+  text-align: center;
+}
+
+.navbar a {
+  color: black;
+  padding: 10px 15px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  text-align: center;
+}
+
+.navbar a:hover {
+  background-color: #555;
+}
