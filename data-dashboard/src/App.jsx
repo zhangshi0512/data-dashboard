@@ -6,8 +6,7 @@ import NavBar from "./components/NavBar.jsx";
 import SearchBar from "./components/SearchBar.jsx";
 import Filter from "./components/Filter.jsx";
 import "./App.css";
-
-// Import SearchBar and Filter once they're defined
+import "rc-slider/assets/index.css";
 
 const App = () => {
   const [allWeatherData, setAllWeatherData] = useState([]);
@@ -42,7 +41,12 @@ const App = () => {
     }
   };
 
-  const filteredData = weatherData.filter((data) => {
+  const timeToDecimal = (timeString) => {
+    const [hours, minutes] = timeString.split(":").map(Number);
+    return hours + minutes / 60;
+  };
+
+  const filteredData = allWeatherData.filter((data) => {
     // Filter logic for rainfall
     if (filters.rainfall === "yes" && data.precip <= 0) return false;
     if (filters.rainfall === "no" && data.precip > 0) return false;
@@ -67,6 +71,14 @@ const App = () => {
     )
       return false;
     if (filters.temperature === "hot" && data.temp <= 26) return false;
+
+    // Filter logic for sunrise and sunset time
+    const sunriseTime = timeToDecimal(data.sunrise);
+    const sunsetTime = timeToDecimal(data.sunset);
+
+    if (sunriseTime < filters.sunrise || sunsetTime > filters.sunset) {
+      return false;
+    }
 
     return true;
   });
@@ -123,10 +135,113 @@ const App = () => {
     // console.log(allData.filter(Boolean));
   };
 
-  const cardCities = ["Seattle", "New York City", "Chicago"];
-  const cardData = allWeatherData.filter((data) =>
-    cardCities.includes(data.city_name)
-  );
+  let lowestTempCity,
+    highestTempCity,
+    medianAQI,
+    medianClouds,
+    earliestSunriseCity,
+    latestSunsetCity;
+  if (allWeatherData.length > 0) {
+    // Existing calculations
+    lowestTempCity = allWeatherData.reduce(
+      (acc, city) => (acc.temp < city.temp ? acc : city),
+      allWeatherData[0]
+    );
+    highestTempCity = allWeatherData.reduce(
+      (acc, city) => (acc.temp > city.temp ? acc : city),
+      allWeatherData[0]
+    );
+    medianAQI = median(allWeatherData.map((data) => data.aqi));
+    medianClouds = median(allWeatherData.map((data) => data.clouds));
+    earliestSunriseCity = allWeatherData.reduce(
+      (acc, city) =>
+        timeToDecimal(acc.sunrise) < timeToDecimal(city.sunrise) ? acc : city,
+      allWeatherData[0]
+    );
+    latestSunsetCity = allWeatherData.reduce(
+      (acc, city) =>
+        timeToDecimal(acc.sunset) > timeToDecimal(city.sunset) ? acc : city,
+      allWeatherData[0]
+    );
+  }
+
+  // // Find the city with the lowest and highest temperature
+  // const lowestTempCity = allWeatherData.reduce(
+  //   (acc, city) => (acc.temp < city.temp ? acc : city),
+  //   allWeatherData[0]
+  // );
+  // const highestTempCity = allWeatherData.reduce(
+  //   (acc, city) => (acc.temp > city.temp ? acc : city),
+  //   allWeatherData[0]
+  // );
+
+  // // Calculate median
+  // const median = (arr) => {
+  //   const mid = Math.floor(arr.length / 2),
+  //     nums = [...arr].sort((a, b) => a - b);
+  //   return arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
+  // };
+
+  // // Calculate the median AQI and Clouds percentage
+  // const medianAQI = median(allWeatherData.map((data) => data.aqi));
+  // const medianClouds = median(allWeatherData.map((data) => data.clouds));
+
+  // // Find the city with the earliest sunrise and latest sunset
+  // const earliestSunriseCity = allWeatherData.reduce(
+  //   (acc, city) =>
+  //     timeToDecimal(acc.sunrise) < timeToDecimal(city.sunrise) ? acc : city,
+  //   allWeatherData[0]
+  // );
+  // const latestSunsetCity = allWeatherData.reduce(
+  //   (acc, city) =>
+  //     timeToDecimal(acc.sunset) > timeToDecimal(city.sunset) ? acc : city,
+  //   allWeatherData[0]
+  // );
+
+  // Statistics data for the cards
+  const summaryData =
+    allWeatherData.length > 0
+      ? [
+          {
+            title: "Temperature",
+            data: [
+              {
+                label: "Lowest",
+                value: `${lowestTempCity.temp}°C in ${lowestTempCity.city_name}`,
+              },
+              {
+                label: "Highest",
+                value: `${highestTempCity.temp}°C in ${highestTempCity.city_name}`,
+              },
+            ],
+          },
+          {
+            title: "Air & Clouds",
+            data: [
+              { label: "Median AQI", value: medianAQI },
+              { label: "Median Clouds %", value: `${medianClouds}%` },
+            ],
+          },
+          {
+            title: "Sun",
+            data: [
+              {
+                label: "Earliest Sunrise",
+                value: `${earliestSunriseCity.sunrise} in ${earliestSunriseCity.city_name}`,
+              },
+              {
+                label: "Latest Sunset",
+                value: `${latestSunsetCity.sunset} in ${latestSunsetCity.city_name}`,
+              },
+            ],
+          },
+        ]
+      : [];
+
+  // const cardCities = ["Seattle", "New York City", "Chicago"];
+  // const cardData = allWeatherData.filter((data) =>
+  //   cardCities.includes(data.city_name)
+  // );
 
   // console.log(cardData.length);
 
@@ -143,13 +258,12 @@ const App = () => {
       </div>
       <div className="right-panel">
         <div className="cards-wrapper">
-          {cardData.length > 0 ? (
-            cardData.map((data) => <Card key={data.city_name} data={data} />)
-          ) : (
-            <p>No data available</p>
-          )}
+          {summaryData.map((data, idx) => (
+            <Card key={idx} data={data} />
+          ))}
         </div>
         <SearchBar
+          className="search-bar"
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           setWeatherData={setWeatherData}

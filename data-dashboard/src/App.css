@@ -49,6 +49,8 @@
 
 .list {
   width: 100%;
+  /* padding: 2em; */
+  margin-top: 50px;
   border-collapse: collapse;
 }
 
@@ -134,4 +136,31 @@
 
 .navbar a:hover {
   background-color: #555;
+}
+
+.range-wrapper {
+  position: relative;
+}
+
+.sunrise-label,
+.sunset-label {
+  position: absolute;
+  bottom: 100%;
+  transform: translateX(-50%);
+}
+
+.rainfall-filter {
+  margin-bottom: 10px; /* Or whatever spacing you prefer */
+}
+
+.wind-direction-filter {
+  margin-bottom: 20px; /* Or whatever spacing you prefer */
+}
+
+.temperature-filter {
+  margin-bottom: 10px; /* Or whatever spacing you prefer */
+}
+
+.search-bar {
+  margin-bottom: 20px;
 }

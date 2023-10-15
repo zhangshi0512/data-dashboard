@@ -2,7 +2,7 @@
 
 Submitted by: **Shi Zhang**
 
-This web app: **insert description**
+This web app: **Weather Dashboard**
 
 Time spent: **X** hours spent in total
 
@@ -12,16 +12,21 @@ The following **required** functionality is completed:
 
 - [x] **The list displays a list of data fetched using an API call**
 - [x] **Data uses the useEffect React hook and async/await syntax**
-- [ ] **The app dashboard includes at least three summary statistics about the data such as**
-  - [ ] _insert details_
+- [x] **The app dashboard includes at least three summary statistics about the data such as**
+  - [x] _lowest temperature & city name_
+  - [x] _highest temperature & city name_
+  - [x] _median air quality index_
+  - [x] _median clouds percentage_
+  - [x] _earliest sunrise time & city name_
+  - [x] _latest sunset time & city name_
 - [x] **A search bar allows the user to search for an item in the fetched data**
-- [ ] **Multiple different filters (2+) allow the user to filter items in the database by specified categories**
+- [x] **Multiple different filters (2+) allow the user to filter items in the database by specified categories**
 
 The following **optional** features are implemented:
 
-- [ ] Multiple filters can be applied simultaneously
-- [ ] Filters use different input types such as a text input, a selection, or a slider
-- [ ] The user can enter specific bounds for filter values
+- [x] Multiple filters can be applied simultaneously
+- [x] Filters use different input types such as a text input, a selection, or a slider
+- [x] The user can enter specific bounds (city name) for filter values
 
 The following **additional** features are implemented:
 
