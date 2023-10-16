@@ -2,9 +2,9 @@
 
 Submitted by: **Shi Zhang**
 
-This web app: **Weather Dashboard**
+This web app: **WeatherBit Dashboard**
 
-Time spent: **X** hours spent in total
+Time spent: **7** hours spent in total
 
 ## Required Features
 
@@ -13,12 +13,10 @@ The following **required** functionality is completed:
 - [x] **The list displays a list of data fetched using an API call**
 - [x] **Data uses the useEffect React hook and async/await syntax**
 - [x] **The app dashboard includes at least three summary statistics about the data such as**
-  - [x] _lowest temperature & city name_
-  - [x] _highest temperature & city name_
+  - [x] _average temperature_
   - [x] _median air quality index_
   - [x] _median clouds percentage_
-  - [x] _earliest sunrise time & city name_
-  - [x] _latest sunset time & city name_
+  - [x] _median daytime duration_
 - [x] **A search bar allows the user to search for an item in the fetched data**
 - [x] **Multiple different filters (2+) allow the user to filter items in the database by specified categories**
 
@@ -30,17 +28,18 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-- [ ] List anything else that you added to improve the site's functionality!
+- [x] A double pointer slider to filter the duration of time
+- [x] Appealing visual effects of card to display the summary statistics
 
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/wZWdFBz.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 <!-- Replace this with whatever GIF tool you used! -->
 
-GIF created with ...
+GIF created with LiceCap
 
 <!-- Recommended tools:
 [Kap](https://getkap.co/) for macOS
@@ -49,7 +48,7 @@ GIF created with ...
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+Handling both multiple filters is challenging.
 
 ## License
 

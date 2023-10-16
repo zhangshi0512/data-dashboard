@@ -18,6 +18,13 @@ const App = () => {
     temperature: "all",
   });
 
+  // Calculate median
+  const median = (arr) => {
+    const mid = Math.floor(arr.length / 2),
+      nums = [...arr].sort((a, b) => a - b);
+    return arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
+  };
+
   const convertWindDirectionToFullForm = (abbreviation) => {
     switch (abbreviation) {
       case "N":
@@ -46,7 +53,7 @@ const App = () => {
     return hours + minutes / 60;
   };
 
-  const filteredData = allWeatherData.filter((data) => {
+  const filteredData = weatherData.filter((data) => {
     // Filter logic for rainfall
     if (filters.rainfall === "yes" && data.precip <= 0) return false;
     if (filters.rainfall === "no" && data.precip > 0) return false;
@@ -165,40 +172,20 @@ const App = () => {
     );
   }
 
-  // // Find the city with the lowest and highest temperature
-  // const lowestTempCity = allWeatherData.reduce(
-  //   (acc, city) => (acc.temp < city.temp ? acc : city),
-  //   allWeatherData[0]
-  // );
-  // const highestTempCity = allWeatherData.reduce(
-  //   (acc, city) => (acc.temp > city.temp ? acc : city),
-  //   allWeatherData[0]
-  // );
+  // Calculate average temperature
+  const averageTemperature =
+    allWeatherData.reduce((acc, city) => acc + city.temp, 0) /
+    allWeatherData.length;
 
-  // // Calculate median
-  // const median = (arr) => {
-  //   const mid = Math.floor(arr.length / 2),
-  //     nums = [...arr].sort((a, b) => a - b);
-  //   return arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
-  // };
+  // Calculate daytime duration for each city
+  const daytimeDurations = allWeatherData.map(
+    (data) => timeToDecimal(data.sunset) - timeToDecimal(data.sunrise)
+  );
 
-  // // Calculate the median AQI and Clouds percentage
-  // const medianAQI = median(allWeatherData.map((data) => data.aqi));
-  // const medianClouds = median(allWeatherData.map((data) => data.clouds));
+  // Sort the durations and get the median
+  const medianDaytimeDuration = median(daytimeDurations);
 
-  // // Find the city with the earliest sunrise and latest sunset
-  // const earliestSunriseCity = allWeatherData.reduce(
-  //   (acc, city) =>
-  //     timeToDecimal(acc.sunrise) < timeToDecimal(city.sunrise) ? acc : city,
-  //   allWeatherData[0]
-  // );
-  // const latestSunsetCity = allWeatherData.reduce(
-  //   (acc, city) =>
-  //     timeToDecimal(acc.sunset) > timeToDecimal(city.sunset) ? acc : city,
-  //   allWeatherData[0]
-  // );
-
-  // Statistics data for the cards
+  // Update the statistics data for the cards
   const summaryData =
     allWeatherData.length > 0
       ? [
@@ -206,12 +193,8 @@ const App = () => {
             title: "Temperature",
             data: [
               {
-                label: "Lowest",
-                value: `${lowestTempCity.temp}°C in ${lowestTempCity.city_name}`,
-              },
-              {
-                label: "Highest",
-                value: `${highestTempCity.temp}°C in ${highestTempCity.city_name}`,
+                label: `Average Temperature from ${allWeatherData.length} Cities is`,
+                value: `${averageTemperature.toFixed(2)}°C`,
               },
             ],
           },
@@ -226,24 +209,13 @@ const App = () => {
             title: "Sun",
             data: [
               {
-                label: "Earliest Sunrise",
-                value: `${earliestSunriseCity.sunrise} in ${earliestSunriseCity.city_name}`,
-              },
-              {
-                label: "Latest Sunset",
-                value: `${latestSunsetCity.sunset} in ${latestSunsetCity.city_name}`,
+                label: "Median Daytime Duration is",
+                value: `${medianDaytimeDuration.toFixed(2)} hours`,
               },
             ],
           },
         ]
       : [];
-
-  // const cardCities = ["Seattle", "New York City", "Chicago"];
-  // const cardData = allWeatherData.filter((data) =>
-  //   cardCities.includes(data.city_name)
-  // );
-
-  // console.log(cardData.length);
 
   useEffect(() => {
     fetchAllCitiesData();
