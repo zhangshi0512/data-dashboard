@@ -7,6 +7,7 @@ import SearchBar from "./components/SearchBar.jsx";
 import Filter from "./components/Filter.jsx";
 import "./App.css";
 import "rc-slider/assets/index.css";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
 const App = () => {
   const [allWeatherData, setAllWeatherData] = useState([]);
