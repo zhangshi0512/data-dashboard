@@ -5,9 +5,10 @@ import List from "./components/List.jsx";
 import NavBar from "./components/NavBar.jsx";
 import SearchBar from "./components/SearchBar.jsx";
 import Filter from "./components/Filter.jsx";
+import DetailView from "./components/DetailView.jsx";
 import "./App.css";
 import "rc-slider/assets/index.css";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 
 const App = () => {
   const [allWeatherData, setAllWeatherData] = useState([]);
@@ -224,30 +225,45 @@ const App = () => {
   }, []);
 
   return (
-    <div className="container">
-      <div className="left-panel">
-        <Header />
-        <NavBar />
-      </div>
-      <div className="right-panel">
-        <div className="cards-wrapper">
-          {summaryData.map((data, idx) => (
-            <Card key={idx} data={data} />
-          ))}
+    <Router>
+      <div className="container">
+        <div className="left-panel">
+          <Header />
+          <NavBar />
         </div>
-        <SearchBar
-          className="search-bar"
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          setWeatherData={setWeatherData}
-          fetchAllCitiesData={fetchAllCitiesData}
-        />
-        <Filter filters={filters} setFilters={setFilters} />
-        <div className="list-wrapper">
-          <List data={filteredData} />
+        <div className="right-panel">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <div>
+                  <div className="cards-wrapper">
+                    {summaryData.map((data, idx) => (
+                      <Card key={idx} data={data} />
+                    ))}
+                  </div>
+                  <SearchBar
+                    className="search-bar"
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                    setWeatherData={setWeatherData}
+                    fetchAllCitiesData={fetchAllCitiesData}
+                  />
+                  <Filter filters={filters} setFilters={setFilters} />
+                  <div className="list-wrapper">
+                    <List data={filteredData} />
+                  </div>
+                </div>
+              }
+            />
+            <Route
+              path="/details/:id"
+              element={<DetailView allWeatherData={allWeatherData} />}
+            />
+          </Routes>
         </div>
       </div>
-    </div>
+    </Router>
   );
 };
 
