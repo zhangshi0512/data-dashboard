@@ -37,6 +37,24 @@ const Filter = ({ filters, setFilters }) => {
     24: "24",
   };
 
+  // Compute position based on time
+  const computePosition = (time) => {
+    if (typeof time !== "string") return 0; // Check if time is a string
+    const [hour, minute] = time.split(":").map(Number);
+    return ((hour + minute / 60) / 24) * 100;
+  };
+
+  const sunrisePosition = computePosition(filters.sunrise || "06:00");
+  const sunsetPosition = computePosition(filters.sunset || "18:00");
+
+  const formatTime = (time) => {
+    const hours = Math.floor(time);
+    const minutes = Math.round((time - hours) * 60);
+    return `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}`;
+  };
+
   return (
     <div className="filters">
       {/* Rainfall filter */}
@@ -77,10 +95,7 @@ const Filter = ({ filters, setFilters }) => {
 
       {/* Sunrise & Sunset slider */}
       <div className="range-wrapper">
-        <span
-          className="sunrise-label"
-          style={{ left: `${filters.sunrise * 4}%` }}
-        >
+        <span className="sunrise-label" style={{ left: `${sunrisePosition}%` }}>
           Sunrise
         </span>
         <Range
@@ -91,16 +106,13 @@ const Filter = ({ filters, setFilters }) => {
           onAfterChange={(value) => {
             setFilters((prev) => ({
               ...prev,
-              sunrise: value[0],
-              sunset: value[1],
+              sunrise: formatTime(value[0]),
+              sunset: formatTime(value[1]),
             }));
           }}
           marks={marks}
         />
-        <span
-          className="sunset-label"
-          style={{ left: `${filters.sunset * 4}%` }}
-        >
+        <span className="sunset-label" style={{ left: `${sunsetPosition}%` }}>
           Sunset
         </span>
       </div>

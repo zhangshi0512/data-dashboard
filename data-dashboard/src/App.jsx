@@ -6,11 +6,28 @@ import NavBar from "./components/NavBar.jsx";
 import SearchBar from "./components/SearchBar.jsx";
 import Filter from "./components/Filter.jsx";
 import DetailView from "./components/DetailView.jsx";
+import Dashboard from "./components/Dashboard";
+import SearchPage from "./components/SearchPage";
+import About from "./components/About";
+import TemperatureChartCard from "./components/TemperatureChartCard";
+import DaytimeDurationChartCard from "./components/DaytimeDurationChartCard";
 import "./App.css";
 import "rc-slider/assets/index.css";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 
+export const ThemeContext = React.createContext();
+
 const App = () => {
+  const [theme, setTheme] = useState("dark"); // Default to dark theme
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => {
+      const newTheme = prevTheme === "dark" ? "light" : "dark";
+      document.body.className = newTheme + "-theme"; // Update the body className
+      return newTheme;
+    });
+  };
+
   const [allWeatherData, setAllWeatherData] = useState([]);
   const [weatherData, setWeatherData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -18,6 +35,8 @@ const App = () => {
     rainfall: "all",
     windDirection: "all",
     temperature: "all",
+    sunrise: "03:00", // Default sunrise time
+    sunset: "23:00", // Default sunset time
   });
 
   // Calculate median
@@ -51,6 +70,8 @@ const App = () => {
   };
 
   const timeToDecimal = (timeString) => {
+    if (!timeString || typeof timeString !== "string") return 0;
+
     const [hours, minutes] = timeString.split(":").map(Number);
     return hours + minutes / 60;
   };
@@ -84,8 +105,10 @@ const App = () => {
     // Filter logic for sunrise and sunset time
     const sunriseTime = timeToDecimal(data.sunrise);
     const sunsetTime = timeToDecimal(data.sunset);
+    const filterSunriseTime = timeToDecimal(filters.sunrise);
+    const filterSunsetTime = timeToDecimal(filters.sunset);
 
-    if (sunriseTime < filters.sunrise || sunsetTime > filters.sunset) {
+    if (sunriseTime < filterSunriseTime || sunsetTime > filterSunsetTime) {
       return false;
     }
 
@@ -114,7 +137,10 @@ const App = () => {
       { city: "Raleigh", country: "US" },
       { city: "Chicago", country: "US" },
       { city: "New York City", country: "US" },
+      { city: "Houston", country: "US" },
+      { city: "Phoenix", country: "US" },
       { city: "Seattle", country: "US" },
+      { city: "Los Angeles", country: "US" },
       { city: "San Francisco", country: "US" },
       { city: "Berlin", country: "DE" },
       { city: "Paris", country: "FR" },
@@ -141,37 +167,14 @@ const App = () => {
     );
     setAllWeatherData(allData.filter(Boolean));
     setWeatherData(allData.filter(Boolean)); // filter out any null values
-    // console.log(allData.filter(Boolean));
+    const top10CitiesData = allWeatherData.slice(0, 10);
+    console.log("Top 10 Cities Data:", top10CitiesData);
   };
 
-  let lowestTempCity,
-    highestTempCity,
-    medianAQI,
-    medianClouds,
-    earliestSunriseCity,
-    latestSunsetCity;
+  let medianAQI, medianClouds;
   if (allWeatherData.length > 0) {
-    // Existing calculations
-    lowestTempCity = allWeatherData.reduce(
-      (acc, city) => (acc.temp < city.temp ? acc : city),
-      allWeatherData[0]
-    );
-    highestTempCity = allWeatherData.reduce(
-      (acc, city) => (acc.temp > city.temp ? acc : city),
-      allWeatherData[0]
-    );
     medianAQI = median(allWeatherData.map((data) => data.aqi));
     medianClouds = median(allWeatherData.map((data) => data.clouds));
-    earliestSunriseCity = allWeatherData.reduce(
-      (acc, city) =>
-        timeToDecimal(acc.sunrise) < timeToDecimal(city.sunrise) ? acc : city,
-      allWeatherData[0]
-    );
-    latestSunsetCity = allWeatherData.reduce(
-      (acc, city) =>
-        timeToDecimal(acc.sunset) > timeToDecimal(city.sunset) ? acc : city,
-      allWeatherData[0]
-    );
   }
 
   // Calculate average temperature
@@ -225,45 +228,83 @@ const App = () => {
   }, []);
 
   return (
-    <Router>
-      <div className="container">
-        <div className="left-panel">
-          <Header />
-          <NavBar />
-        </div>
-        <div className="right-panel">
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <div>
-                  <div className="cards-wrapper">
-                    {summaryData.map((data, idx) => (
-                      <Card key={idx} data={data} />
-                    ))}
-                  </div>
-                  <SearchBar
-                    className="search-bar"
-                    searchTerm={searchTerm}
-                    setSearchTerm={setSearchTerm}
-                    setWeatherData={setWeatherData}
-                    fetchAllCitiesData={fetchAllCitiesData}
-                  />
-                  <Filter filters={filters} setFilters={setFilters} />
-                  <div className="list-wrapper">
-                    <List data={filteredData} />
-                  </div>
-                </div>
-              }
-            />
-            <Route
-              path="/details/:id"
-              element={<DetailView allWeatherData={allWeatherData} />}
-            />
-          </Routes>
-        </div>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      <div className={`container ${theme}-theme`}>
+        <Router>
+          <div className="container">
+            <div className="left-panel">
+              <Header />
+              <NavBar />
+            </div>
+            <div className="right-panel">
+              <Routes>
+                <Route
+                  path="/dashboard"
+                  element={
+                    <Dashboard
+                      summaryData={summaryData}
+                      searchTerm={searchTerm}
+                      setSearchTerm={setSearchTerm}
+                      setWeatherData={setWeatherData}
+                      fetchAllCitiesData={fetchAllCitiesData}
+                      filters={filters}
+                      setFilters={setFilters}
+                      filteredData={filteredData}
+                      top10CitiesData={allWeatherData.slice(0, 10)}
+                    />
+                  }
+                />
+                <Route path="/search" element={<SearchPage />} />
+                <Route path="/about" element={<About />} />
+                <Route
+                  path="/"
+                  element={
+                    <div>
+                      {/* Cards Container */}
+                      <div className="cards-wrapper">
+                        {summaryData.map((data, idx) => (
+                          <Card key={idx} data={data} />
+                        ))}
+                      </div>
+
+                      {/* Charts Container */}
+                      <div className="charts-wrapper">
+                        <div className="chart-card">
+                          <TemperatureChartCard
+                            data={allWeatherData.slice(0, 10)}
+                          />
+                        </div>
+                        <div className="chart-card">
+                          <DaytimeDurationChartCard
+                            data={allWeatherData.slice(0, 10)}
+                          />
+                        </div>
+                      </div>
+
+                      <SearchBar
+                        className="search-bar"
+                        searchTerm={searchTerm}
+                        setSearchTerm={setSearchTerm}
+                        setWeatherData={setWeatherData}
+                        fetchAllCitiesData={fetchAllCitiesData}
+                      />
+                      <Filter filters={filters} setFilters={setFilters} />
+                      <div className="list-wrapper">
+                        <List data={filteredData} />
+                      </div>
+                    </div>
+                  }
+                />
+                <Route
+                  path="/details/:id"
+                  element={<DetailView allWeatherData={allWeatherData} />}
+                />
+              </Routes>
+            </div>
+          </div>
+        </Router>
       </div>
-    </Router>
+    </ThemeContext.Provider>
   );
 };
 

@@ -9,35 +9,32 @@ const List = ({ data }) => {
   };
 
   return (
-    <table className="list">
-      <thead>
-        <tr>
-          <th>City</th>
-          <th>Temperature (°C)</th>
-          <th>Rainfall</th>
-          <th>Wind</th>
-          <th>Sunrise</th>
-          <th>Sunset</th>
-          <th>Datetime</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item) => (
-          <tr
-            key={item.lon + "-" + item.lat}
-            onClick={() => handleRowClick(item.city_name)}
-          >
-            <td>{item.city_name}</td>
-            <td>{item.temp}</td>
-            <td>{item.precip}</td>
-            <td>{item.wind_cdir_full}</td>
-            <td>{item.sunrise}</td>
-            <td>{item.sunset}</td>
-            <td>{item.datetime}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div className="list-container">
+      <div className="list-header">
+        <div className="header-item">City</div>
+        <div className="header-item">Temperature (°C)</div>
+        <div className="header-item">Rainfall</div>
+        <div className="header-item">Wind</div>
+        <div className="header-item">Sunrise</div>
+        <div className="header-item">Sunset</div>
+        <div className="header-item">Datetime</div>
+      </div>
+      {data.map((item) => (
+        <div
+          key={item.lon + "-" + item.lat}
+          className="list-item"
+          onClick={() => handleRowClick(item.city_name)}
+        >
+          <div className="list-city clickable">{item.city_name}</div>
+          <div>{item.temp}°C</div>
+          <div>{item.precip !== 0 ? item.precip.toFixed(2) : item.precip}</div>
+          <div>{item.wind_cdir_full}</div>
+          <div>{item.sunrise}</div>
+          <div>{item.sunset}</div>
+          <div>{item.datetime}</div>
+        </div>
+      ))}
+    </div>
   );
 };
 

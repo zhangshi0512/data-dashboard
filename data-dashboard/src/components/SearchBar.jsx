@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 const SearchBar = (props) => {
-  const handleSearch = async () => {
+  const handleDashboardSearch = async () => {
     if (props.searchTerm.trim() === "") {
       props.fetchAllCitiesData(); // fetch all cities data if the search term is empty
       return;
@@ -14,21 +14,48 @@ const SearchBar = (props) => {
     );
     const data = await response.json();
     if (data && data.data && data.data.length > 0) {
-      props.setWeatherData(data.data);
+      // Add the conditional check here
+      if (props.setWeatherData) {
+        props.setWeatherData(data.data[0]);
+        console.log(data);
+      }
     } else {
-      props.setWeatherData([]); // set empty array if no data found for the city
+      // And here
+      if (props.setWeatherData) {
+        props.setWeatherData([]); // set empty array if no data found for the city
+      }
     }
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    props.onSelectCity(suggestion);
+    props.setSearchTerm(suggestion.city);
   };
 
   return (
     <div className="search-bar">
       <input
+        className="city-search"
         type="text"
         placeholder="Search by city name..."
         value={props.searchTerm}
         onChange={(e) => props.setSearchTerm(e.target.value)}
       />
-      <button onClick={handleSearch}>Search</button>
+      <button onClick={handleDashboardSearch}>Search</button>
+      {props.mode === "searchPage" &&
+      props.suggestions &&
+      props.suggestions.length > 0 ? (
+        <div className="suggestions-dropdown">
+          {props.suggestions.map((suggestion) => (
+            <div
+              key={suggestion.city}
+              onClick={() => handleSuggestionClick(suggestion)}
+            >
+              {suggestion.city}, {suggestion.country}
+            </div>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 };
