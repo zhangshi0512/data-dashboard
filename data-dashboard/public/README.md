@@ -1,51 +1,54 @@
-# Web Development Project 6 - _Data Dashboard_
+# Web Development Project 5 - _Data Dashboard_
 
 Submitted by: **Shi Zhang**
 
 This web app: **WeatherBit Dashboard**
 
-Time spent: **10** hours spent in total
+Time spent: **7** hours spent in total
 
 ## Required Features
 
 The following **required** functionality is completed:
 
-- [x] **The app includes at least one unique chart developed using the fetched data that tell an interesting story**
-- [x] **Clicking on an item in the list view displays more details about it**
-- [x] **Clicking on an item has a direct, unique link to that item's detail view page**
+- [x] **The list displays a list of data fetched using an API call**
+- [x] **Data uses the useEffect React hook and async/await syntax**
+- [x] **The app dashboard includes at least three summary statistics about the data such as**
+  - [x] _average temperature_
+  - [x] _median air quality index_
+  - [x] _median clouds percentage_
+  - [x] _median daytime duration_
+- [x] **A search bar allows the user to search for an item in the fetched data**
+- [x] **Multiple different filters (2+) allow the user to filter items in the database by specified categories**
 
 The following **optional** features are implemented:
 
-- [x] The site's customized dashboard contains more content that explains what is interesting about the data
-- [x] The site allows users to toggle between different data visualizations
+- [x] Multiple filters can be applied simultaneously
+- [x] Filters use different input types such as a text input, a selection, or a slider
+- [x] The user can enter specific bounds (city name) for filter values
 
 The following **additional** features are implemented:
 
-- [x] Applied a map view within detail view for each city
-- [x] Applied light/dark themes for user to toggle
+- [x] A double pointer slider to filter the duration of time
+- [x] Appealing visual effects of card to display the summary statistics
 
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://i.imgur.com/3tbi6PI.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/wZWdFBz.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 <!-- Replace this with whatever GIF tool you used! -->
 
-GIF created with LICEcap
+GIF created with LiceCap
 
 <!-- Recommended tools:
 [Kap](https://getkap.co/) for macOS
 [ScreenToGif](https://www.screentogif.com/) for Windows
 [peek](https://github.com/phw/peek) for Linux. -->
 
-## Netlify Demo
-
-[WeatherBit App](https://weatherbit-data-dashboard.netlify.app/dashboard)
-
 ## Notes
 
-Make router pages work and make the similar function does not interfere each other is extremely challenging.
+Handling both multiple filters is challenging.
 
 ## License
 
