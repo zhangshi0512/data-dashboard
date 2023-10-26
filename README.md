@@ -28,6 +28,8 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
+![Project06_Demo2](https://github.com/zhangshi0512/data-dashboard/assets/100053535/afc3ae94-cce7-4c95-86c4-6723131bae73)
+
 <img src='https://i.imgur.com/3tbi6PI.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 <!-- Replace this with whatever GIF tool you used! -->
